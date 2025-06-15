@@ -10,4 +10,4 @@
 **/__pycache__/
 
 # Extra files
-./requirements.txt
+/requirements.txt/
