@@ -1,0 +1,13 @@
+# Environment
+.env
+**/venv/
+**/vvv/
+
+# Database file directory
+**/data/
+
+# Pycahce
+**/__pycache__/
+
+# Extra files
+requirements.txt
