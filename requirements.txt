@@ -1,2 +1,0 @@
-# This for easy testing
-pytest 
