@@ -8,3 +8,6 @@
 
 # Pycahce
 **/__pycache__/
+
+# Extra files
+./requirements.txt
