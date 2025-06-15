@@ -1,0 +1,10 @@
+# Environment
+.env
+**/venv/
+**/vvv/
+
+# Database file directory
+**/data/
+
+# Pycahce
+**/__pycache__/
