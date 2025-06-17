@@ -23,6 +23,7 @@ class FolderContentView(VerticalScroll):
         '''This message is sent whenever an item from the list is selected'''
 
         def __init__(self, item_id: int):
+            print(f"The item id inside slected: {item_id}")
             self.item_id = item_id
             super().__init__()
 
@@ -63,11 +64,15 @@ class FolderContentView(VerticalScroll):
         '''
 
         # Gets the label that holds our selected item name
+
         label = event.item.query_one(Label)
         item_name = label.renderable
 
         # Get the id of the item from the database
+        print(f"Item name: {item_name}")
         id = db.get_item_id(item_name)
+
+        print(f"The collected item id: {id}")
 
         self.post_message(self.Selected(item_id=id))
 
@@ -94,12 +99,14 @@ class MainPage(Screen):
         )
 
     # Whenever the show item details message is sent
-    def on_folder_content_view_selected(self, message: FolderContentView) -> None:
+    def on_folder_content_view_selected(self, message: FolderContentView.Selected) -> None:
         # Get our item view widget
         item_view = self.query_one(ItemView)
 
         # Call the update function
-        item_view.update_item_details(message.item_id)
+        id = message.item_id
+        print(f"ID inside mina_page message receiver: {id}")
+        item_view.update_item_details(id)
 
     # This function refreshes the list that shows the contents of a folder
     def refresh_item_list(self):

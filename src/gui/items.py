@@ -16,11 +16,13 @@ class ItemView(VerticalScroll):
     template_chosen = reactive(0)
 
     def compose(self):
+        self.container = Container(id="content_container")
+
         # If create_new_user show new user page
         # If show contents of item show the contents
         # use refresh function to redraw
         yield Label("Item Content")
-        yield Container(id="content_container")
+        yield self.container
 
     # This function watches our reactive variable
     # Its called every time our variable is mutated
@@ -29,26 +31,28 @@ class ItemView(VerticalScroll):
 
     # Updates our container so it can show the widget we need
     def update_display(self):
-        container = self.query_one("#content_container", Container)
 
         # Erase all the currently displayed widgets
-        container.remove_children()
+        # self.container.remove_children()
+
+        for child in self.container.children:
+            child.remove()
 
         match self.template_chosen:
             case 0:
-                container.remove_children()
+                self.container.remove_children()
             case 1:
-                container.mount(ShowItemDetails())
+                self.container.mount(ShowItemDetails())
             case 2:
-                container.mount(CreatNewItemScreen())
+                self.container.mount(CreatNewItemScreen())
 
     # This function is called every time the displayed item needs to be updated
-    def update_item_details(self, item_id: int):
+    def update_item_details(self, new_id: int):
         self.template_chosen = 1
 
         # Update the id of the item shown
         item_details = self.query_one(ShowItemDetails)
-        item_details.item_id = item_id
+        item_details.item_id = new_id
 
         # Refresh so changes can be shown
         item_details.refresh()
@@ -136,22 +140,29 @@ class CreatNewItemScreen(Vertical):
 class ShowItemDetails(VerticalScroll):
     '''Widget that's show to display the details of a selected item'''
 
-    item_id = reactive(0)
+    item_id = reactive(1)
+    is_mounted = False
+    show_password = False
 
     def compose(self) -> ComposeResult:
+        self.show_password = False
+
         yield Label("Name: ", id="name_label_items")
         yield Label("Username: ", id="username_label")
 
         # Set this up eventually to use the show password button
         yield Horizontal(
             # Set it up where the label will show the password after the button is clicked
-            Label("Password: ", id="password_label"), Button(
-                "Show password", id="show_password_button")
+            Label("Password: ", id="password_label"),
+            Button(
+                "👁", id="show_password_button"),
+            id="password_item_view_box",
         )
-
         yield Button("Edit", id="edit_button")
 
     def on_mount(self) -> None:
+        self.is_mounted = True
+        self.show_password = False
         self.get_item_details()
 
     def on_button_pressed(self, event: Button.Pressed):
@@ -159,17 +170,47 @@ class ShowItemDetails(VerticalScroll):
             case "edit_button":
                 print("Todo!")
 
+            case "show_password_button":
+
+                # If the password is already shown hide it
+                if not self.show_password:
+                    self.show_password = True
+                else:
+                    self.show_password = False
+
+                self.get_item_details()
+
+    # Called whenever the item_id variable is updated
+    def watch_item_id(self, old_val, new_val):
+        self.show_password = False
+        if not self.is_mounted:
+            print("Not mounted")
+            return
+
+        print(f"Old val: {old_val}")
+        print(f"New val: {new_val}")
+        self.get_item_details()
+
     def get_item_details(self):
         "Updates the values of name. Username and password"
+        print(f"Id inside get_item_details: {self.item_id}")
         name, username, password = db.get_item_details(self.item_id)
 
-        self.query_one("#name_label_items", Label).update(f"Name: {name}")
+        self.query_one("#name_label_items").update(f"Name: {name}")
         self.query_one("#username_label", Label).update(
             f"Username: {username}")
+
+        if not self.show_password:
+            password = len(password) * "."
+
         self.query_one("#password_label", Label).update(
             f"Password: {password}")
 
 
 # This class is for the screen shown when editing a item
 class EditItemDetails(Vertical):
+    print("Todo!")
+    print("Todo!")
+    print("Todo!")
+    print("Todo!")
     print("Todo!")

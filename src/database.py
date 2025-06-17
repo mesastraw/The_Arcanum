@@ -362,6 +362,8 @@ class Database:
         '''This function gets the item_name, username and password
         It decrypts the password (This returns a tuple)'''
 
+        print(f"Item id: {item_id}")
+
         sql_statement = '''
         SELECT 
             item_name,

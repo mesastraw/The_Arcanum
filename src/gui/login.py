@@ -6,7 +6,7 @@
 # TODO: Add some password and username checks
 
 from textual.app import ComposeResult
-from textual.containers import Vertical, Horizontal
+from textual.containers import Vertical, Horizontal, Container
 from textual.widgets import Input, Label, Button, Footer
 from textual.screen import Screen
 from utils import convert_to_int
@@ -20,25 +20,36 @@ class LoginPage(Screen):
     There will be a button to create a new user and a button to log in
     '''
 
+    CSS_PATH = "../assets/login_page.tcss"
+
     valid_user = vars(bool)
 
     def compose(self) -> ComposeResult:
         yield Footer()
-        yield Vertical(
-            Label("Log In", id="login_title"),
-            Input(
-                placeholder="Username", id="username_input_login"
-            ),
-            Input(
-                placeholder="Password", id="password_input_login", password=True
-            ),
-            # This will be invalid password or label
-            Label("", id="login_label"),
-            Horizontal(
-                Button("Log In", id="log_in_button"),
-                Button("Create New User", id="new_user_button"),
+
+        yield Label("The Arcanum", id="App_name")
+
+        yield Container(
+            Vertical(
+                Label("Log In", id="login_title"),
+                Input(
+                    placeholder="Username", id="username_input_login"
+                ),
+                Input(
+                    placeholder="Password", id="password_input_login", password=True
+                ),
+                # This will be invalid password or label
+                Label("", id="login_label"),
+                Horizontal(
+                    Button("Log In", id="log_in_button"),
+                    Button("Create New User", id="new_user_button"),
+                    id="login_page_button_row"
+                ),
+
+                id="login_detials_coloumn"
             ),
 
+            id="login_page_container",
         )
 
     # Whenever any button is pressed in the app
@@ -66,9 +77,7 @@ class LoginPage(Screen):
             # Go to the main screen
             self.app.switch_screen(MainPage())
         else:
-            # Erase the username and password field
-            self.query_one(
-                "#username_input_login", Input).value = ""
+            # Erase the password field
             self.query_one(
                 "#password_input_login", Input).value = ""
 
@@ -111,17 +120,26 @@ class LoginPage(Screen):
 # The page where a user can create a new user account
 class NewUserPage(Screen):
 
-    def compose(self) -> ComposeResult:
-        yield Vertical(
-            Label("Create New User", id="new_userpage_label"),
-            Input(placeholder="username", id="new_userpage_username_input"),
-            Input(placeholder="password", id="new_userpage_password_input"),
-            Label("", id="user_creation_message"),
+    CSS_PATH = "../assets/new_user_page.tcss"
 
-            Horizontal(
-                Button("Create", id="create_button"),
-                Button("Return", id="return_button"),
+    def compose(self) -> ComposeResult:
+        yield Container(
+            Vertical(
+                Label("Create New User", id="new_userpage_label"),
+                Input(placeholder="username", id="new_userpage_username_input"),
+                Input(placeholder="password", id="new_userpage_password_input"),
+                Label("", id="user_creation_message"),
+
+                Horizontal(
+                    Button("Create", id="create_button"),
+                    Button("Return", id="return_button"),
+                    id="button_row",
+                ),
+
+                id="new_user_page_column"
             ),
+
+            id="new_user_page_container"
         )
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -147,7 +165,7 @@ class NewUserPage(Screen):
             return
 
         # A password must be 6 characters or more
-        if not len(password) > 6:
+        if not len(password) >= 6:
             self.query_one("#user_creation_message", Label).update(
                 "password has to be 6 charecters or more")
             return

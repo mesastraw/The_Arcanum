@@ -1,0 +1,54 @@
+# Login Page
+
+# The login screen
+NewUserPage {
+    align-horizontal: center;
+    align-vertical: middle;
+}
+
+#new_user_page_container {
+    width: 50%;
+    height: 50%;
+    align-horizontal: center;
+    align-vertical: middle;
+}
+
+#new_user_page_column {
+    content-align: center middle;
+    align-horizontal: center;
+    align-vertical: middle;
+    padding: 1 2;
+}
+
+#new_userpage_label {
+    content-align: center middle;
+    width: 100%;
+    padding: 1 0;
+    text-style: bold;
+}
+
+#create_button {
+    content-align: center middle;
+    padding: 0 0;
+    dock: left;
+}
+
+#return_button {
+    padding-left: 7;
+    height: 3;
+    padding: 0 0;
+    dock: right;
+    content-align: center middle;
+}
+
+#button_row {
+    padding-left: 1;
+}
+
+# Textual doesnt support font size
+#App_name {
+    dock: top;
+    content-align: center middle;
+    padding-left: 38;
+    text-style: bold;
+}

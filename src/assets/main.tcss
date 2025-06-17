@@ -1,20 +1,34 @@
+# Other stuff 
 #form_container {
     height: auto;
     layout: vertical;
-}
-
-#spacer {
-    height: 0%;
 }
 
 #password_input {
     width: 50%;
 }
 
-#show_password_button {
-    width: auto;
-}
-
 #button_row {
     padding-top: 7;
+}
+
+# All widgets part of ShowItemDetials
+#show_password_button {
+    height: 3;
+    padding: 0 0;
+    min-width: 4;
+    dock: right;
+    content-align: center middle;
+}
+
+#password_label {
+}
+
+#password_item_view_box {
+    padding-top: 1;
+    align-horizontal: center;
+}
+
+#name_label_items {
+    padding: 0 1;
 }
