@@ -2,7 +2,7 @@ import os
 
 # Encryption Decryption uses one single key to allow encryption and decryption
 from cryptography.fernet import Fernet
-from dotenv import load_dotenv  # This will allows us to load env files
+# from dotenv import load_dotenv  # This will allows us to load env files
 
 # Loads .env file into scope
 # load_dotenv("../.env")
