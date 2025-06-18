@@ -17,21 +17,21 @@ Install dependencies:
 
 Clone the repo
 
-'''
+```
 $ git clone https://github.com/mesastraw/The_Arcanum.git
-'''
+```
 
 cd into the src directory in the repo
 
-'''
-$ cd ./The_Arcanum/src
-'''
+```
+    $ cd ./The_Arcanum/src
+```
 
 run the main.py
 
-'''
+```
 $ python ./main.py
-'''
+```
 
 ## Todo
 
