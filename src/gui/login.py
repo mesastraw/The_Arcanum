@@ -44,6 +44,7 @@ class LoginPage(Screen):
 
                 # This will be invalid password or label
                 Label("", id="login_label"),
+
                 Horizontal(
                     Button("Log In", id="log_in_button"),
                     Button("Create New User", id="new_user_button"),
@@ -216,4 +217,4 @@ class NewUserPage(Screen):
             # Create the user and add them to the database
             db.add_user(username, password)
             self.app.pop_screen()
-            self.app.pop_screen()
+            # This comment stops a weird saving bug with my editor

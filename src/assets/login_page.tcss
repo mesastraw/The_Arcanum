@@ -29,6 +29,7 @@ LoginPage {
 
 #login_label {
     padding-left: 1;
+    
 }
 
 #log_in_button {

@@ -32,16 +32,22 @@
 #   ^ This is an inefficient function but exists to allow us to do something
 #   ^ Takes a user id and returns all the tasks relating to that user
 #
-# 8 - is_user_exists
+# 8 - is_user_exists (Added)
 #   ^ This function will return true if the user is found false if the user doesnt exists
 #
 
 import sqlite3
 from encrypt import decrpyt, encrypt
 from items import Item
+import os
 
 # Location of our database file
 DATABASE_FILE = "./data/userData.sqlite"
+DIR_PATH = "./data/"
+
+
+def check_data_directory():
+    os.makedirs(DIR_PATH, exist_ok=True)
 
 
 class Database:
@@ -50,9 +56,11 @@ class Database:
     def __init__(self):
         # Connects to our database creates the file if it doesn't exist
         try:
+            check_data_directory()
             # Update this so it checks that the data directory exists
             # Or setup some build system
             self.conn = sqlite3.connect(DATABASE_FILE)
+
         except sqlite3.Error as e:
             print("Database Error: ", e)
 

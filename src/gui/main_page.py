@@ -48,12 +48,13 @@ class FolderContentView(VerticalScroll):
     def refresh_list(self):
         '''This is a function that will refresh the list and should be
         called every time a new item is created or an item is deleted'''
-
+        print("Refreshing list")
         list = self.query_one("#folder_content_list")
         list.clear()
 
         # Get all of our item names and turn them into a list item
         for item in db.get_all_items_names(self.app.logged_in_user_id):
+            print(f"ITem: {item}")
             # Change this to where it only gets the names
             list.append(ListItem(Label(*item)))
 
