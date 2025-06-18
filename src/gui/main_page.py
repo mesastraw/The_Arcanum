@@ -90,10 +90,13 @@ class MainPage(Screen):
 
     # self.app.logged_in_user_id
 
+    CSS_PATH = ["../assets/new_user_page.tcss",
+                "../assets/creat_new_item.tcss"]
+
     def compose(self) -> ComposeResult:
         yield Footer()
         yield Horizontal(
-            FolderView(),
+            # FolderView(), Not enough time to implement this
             FolderContentView(),
             ItemView(),
         )

@@ -270,7 +270,9 @@ class Database:
     def delete_item(self, item_id):
         cursor = self.conn.cursor()
 
-        sql_statemnt = '''DELETE FROM items WHERE id = ?
+        sql_statemnt = '''
+        DELETE FROM items 
+        WHERE id=?
         '''
 
         try:
@@ -394,7 +396,6 @@ class Database:
             cursor.close()
 
     # This functions only purpose for debugging the database
-
     def debug_user(self):
         '''
         This function is purely for debugging

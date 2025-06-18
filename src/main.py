@@ -8,6 +8,7 @@ class ArcanumApp(App):
 
     CSS_PATH = "assets/main.tcss"
 
+    # Key binds for actions
     BINDINGS = [
         Binding(key="q", action="quit", description="Quit the app"),
     ]
@@ -17,10 +18,11 @@ class ArcanumApp(App):
 
     # When the application is created show the login page
     def on_mount(self) -> None:
-        # Add footer that holds quit command and stuff
+        # Setup variable
         self.logged_in_user_id = 0
 
     def on_ready(self) -> None:
+        # Show the login page first
         self.push_screen(LoginPage())
 
 

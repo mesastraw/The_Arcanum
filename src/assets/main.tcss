@@ -13,22 +13,59 @@
 }
 
 # All widgets part of ShowItemDetials
-#show_password_button {
-    height: 3;
-    padding: 0 0;
-    min-width: 4;
-    dock: right;
-    content-align: center middle;
+#show_password_button_details {
+   height: 3;
+   width: auto;
+   min-width: 4;
+   # padding-right: 5;
+   dock: right;
+   content-align: center middle;
 }
 
-#password_label {
+#password_label_details {
 }
 
-#password_item_view_box {
+#password_item_view_box_details {
     padding-top: 1;
+    # align-horizontal: center;
+    padding-left: 13;
+    width: 90%;
+}
+
+#name_label_details {
+    padding-top: 1;
+    padding-left: 13;
+    align: center middle;
     align-horizontal: center;
 }
 
-#name_label_items {
-    padding: 0 1;
+#username_label_details {
+    padding-left: 13;
+    padding-top: 1;
+}
+
+#password_label_details {
+
+}
+
+#edit_button {
+    max-width: 10;
+}
+
+#delete_button {
+
+}
+
+#item_detail_action_buttons {
+    padding-top: 23;
+    padding-left: 1;
+}
+
+#item_details_wrapper {
+    content-align: center middle;
+    align-horizontal: center;
+}
+
+#create_new_item {
+    width: 100%;
 }

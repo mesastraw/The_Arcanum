@@ -27,17 +27,21 @@ class LoginPage(Screen):
     def compose(self) -> ComposeResult:
         yield Footer()
 
-        yield Label("The Arcanum", id="App_name")
-
         yield Container(
+
             Vertical(
                 Label("Log In", id="login_title"),
                 Input(
                     placeholder="Username", id="username_input_login"
                 ),
-                Input(
-                    placeholder="Password", id="password_input_login", password=True
+
+                Horizontal(
+                    Input(placeholder="Password",
+                          id="password_input_login", password=True),
+
+                    Button("👁", id="show_password_button_login"),
                 ),
+
                 # This will be invalid password or label
                 Label("", id="login_label"),
                 Horizontal(
@@ -63,6 +67,23 @@ class LoginPage(Screen):
                 # Push the new user page on the stack
                 # We will return to log in page after once the new user is created
                 self.app.push_screen(NewUserPage())
+            case "show_password_button_login":
+                # Current hidden state
+                password_status = self.query_one(
+                    "#password_input_login", Input).password
+
+                # if the password is already hidden show it if not hide it
+                if password_status:
+
+                    # Show the password
+                    self.query_one("#password_input_login",
+                                   Input).password = False
+                    self.refresh()
+                else:
+                    # Hide the password
+                    self.query_one("#password_input_login",
+                                   Input).password = True
+                    self.refresh()
 
     def handle_login(self):
         '''This function handles all  related to logging in the user'''
@@ -76,6 +97,7 @@ class LoginPage(Screen):
         if self.validate_user(username, password):
             # Go to the main screen
             self.app.switch_screen(MainPage())
+
         else:
             # Erase the password field
             self.query_one(
@@ -97,23 +119,16 @@ class LoginPage(Screen):
             # Handle the int|None object
             id = convert_to_int(id)
             if id == 0:
-                print("id is wrong error")
                 return False
 
             # The password of the user we got from the database
             pass_from_db = db.get_password(id)
-
-            # Debug code
-            # This is only seen when the texutal dev tool is used
-            # print(f"Password from database {pass_from_db}")
-            # print(f"Password from user {password}")
 
             # Check if the passwords are equal
             if password == pass_from_db:
                 self.app.logged_in_user_id = id
                 return True
 
-        print("Password is false")
         return False
 
 
@@ -122,12 +137,21 @@ class NewUserPage(Screen):
 
     CSS_PATH = "../assets/new_user_page.tcss"
 
+    # Layout of the ui and its componenets
     def compose(self) -> ComposeResult:
+        yield Footer()
+
         yield Container(
             Vertical(
                 Label("Create New User", id="new_userpage_label"),
                 Input(placeholder="username", id="new_userpage_username_input"),
-                Input(placeholder="password", id="new_userpage_password_input"),
+                Horizontal(
+                    Input(placeholder="password", password=True,
+                          id="new_userpage_password_input"),
+
+                    Button("👁", id="show_password_button_new_user_page"),
+                ),
+
                 Label("", id="user_creation_message"),
 
                 Horizontal(
@@ -149,6 +173,17 @@ class NewUserPage(Screen):
                 self.handle_user_creation()
             case "return_button":
                 self.app.pop_screen()
+            case "show_password_button_new_user_page":
+                password_status = self.query_one(
+                    "#new_userpage_password_input", Input).password
+
+                # If the password is already hidden show it
+                if password_status:
+                    self.query_one("#new_userpage_password_input",
+                                   Input).password = False
+                else:
+                    self.query_one("#new_userpage_password_input",
+                                   Input).password = True
 
     def handle_user_creation(self):
         '''This function will get the inputs from the user and handle the process of creating a user'''
@@ -180,4 +215,5 @@ class NewUserPage(Screen):
         else:
             # Create the user and add them to the database
             db.add_user(username, password)
+            self.app.pop_screen()
             self.app.pop_screen()

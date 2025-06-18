@@ -1,0 +1,40 @@
+#new_item_container_create_item {
+  content-align: center middle;
+}
+
+#form_container_create_item {
+    height: 95%;
+    layout: vertical;
+}
+
+#name_input {
+
+}
+
+#username_input {
+
+}
+
+#password_input {
+
+}
+
+#show_password_button_create_item {
+   height: 3;
+   width: 6%;
+   min-width: 4;
+   dock: right;
+   content-align: center middle
+}
+
+#button_row_create_item {
+
+}
+
+#save_button_create_item {
+  dock: left;
+}
+
+#cancel_button_create_item {
+  dock: right;
+}

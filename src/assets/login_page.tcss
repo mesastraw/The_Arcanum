@@ -49,10 +49,14 @@ LoginPage {
     padding-left: 1;
 }
 
-# Textual doesnt support font size
-#App_name {
-    dock: top;
-    content-align: center middle;
-    padding-left: 38;
-    text-style: bold;
+#login_label {
+    color: red;
+}
+
+#show_password_button_login {
+   height: 3;
+   width: 6%;
+   min-width: 4;
+   dock: right;
+   content-align: center middle
 }

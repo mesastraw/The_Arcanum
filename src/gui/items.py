@@ -31,12 +31,10 @@ class ItemView(VerticalScroll):
 
     # Updates our container so it can show the widget we need
     def update_display(self):
+        self.refresh_folder_list()
 
         # Erase all the currently displayed widgets
-        # self.container.remove_children()
-
-        for child in self.container.children:
-            child.remove()
+        self.container.remove_children()
 
         match self.template_chosen:
             case 0:
@@ -69,26 +67,31 @@ class CreatNewItemScreen(Vertical):
 
     def compose(self) -> ComposeResult:
         # The input field
-        yield Vertical(
-            Input(placeholder="name", id="name_input"),
-            Input(placeholder="username", id="username_input"),
+        yield Container(
+            Vertical(
+                Input(placeholder="name", id="name_input_create_item"),
+                Input(placeholder="username", id="username_input_create_item"),
+
+                Horizontal(
+                    Input(placeholder="password",
+                          password=True, id="password_input_create_item"),
+                    Button(label="👁  ",
+                           id="show_password_button_create_item")
+                ),
+                Label("", id="info_for_user_label"),
+
+
+
+                id="form_container_create_item"
+            ),
 
             Horizontal(
-                Input(placeholder="password",
-                      password=True, id="password_input"),
-                Button(label="show Password", id="show_password_button")
-            ),
-            Label("", id="info_for_user_label"),
-
-            Static(id="spacer"),
-
-            Horizontal(
-                Button(label="Save", id="save_button"),
-                Button(label="Cancel", id="cancel_button"),
-                id="button_row"
+                Button(label="Save", id="save_button_create_item"),
+                Button(label="Cancel", id="cancel_button_create_item"),
+                id="button_row_create_item"
             ),
 
-            id="form_container"
+            id="new_item_container_create_item"
         )
 
     # Called whenever any of the buttons are pressed
@@ -97,18 +100,26 @@ class CreatNewItemScreen(Vertical):
         # Match the button pressed
         # To its logic
         match event.button.id:
-            case "show_password_button":
-                print("show password")
+            case "show_password_button_create_item":
 
-            case "save_button":
+                # If password is hidden unhide it and vice versa
+                if self.query_one(
+                        "#password_input_create_item", Input).password:
+                    self.query_one(
+                        "#password_input_create_item", Input).password = False
+                else:
+                    self.query_one(
+                        "#password_input_create_item", Input).password = True
+
+            case "save_button_create_item":
                 self.save_button_logic()
                 # Access out ItemView widget
                 self.parent.parent.template_chosen = 0
                 self.parent.parent.update_display()
                 self.parent.parent.refresh_folder_list()
 
-            case "cancel_button":
-                print("Cancel button")
+            case "cancel_button_create_item":
+                self.cancel_button_logic()
 
             case _:
                 pass
@@ -116,9 +127,15 @@ class CreatNewItemScreen(Vertical):
     def save_button_logic(self):
         '''This function handles getting the inputted name, username and password and saving it to the database'''
 
-        item_name = self.query_one("#name_input", Input).value.strip()
-        username = self.query_one("#username_input", Input).value.strip()
-        password = self.query_one("#password_input", Input).value.strip()
+        item_name = self.query_one(
+            "#name_input_create_item", Input).value.strip()
+
+        username = self.query_one(
+            "#username_input_create_item", Input).value.strip()
+
+        password = self.query_one(
+            "#password_input_create_item", Input).value.strip()
+
         label = self.query_one("#info_for_user_label", Label)
 
         # Check if any of the fields are empty
@@ -134,6 +151,21 @@ class CreatNewItemScreen(Vertical):
         # Finally add the item to the database
         db.add_item(self.app.logged_in_user_id, item_name, username, password)
 
+    def cancel_button_logic(self):
+        # Reset all the values to zero
+        self.query_one(
+            "#name_input_create_item", Input).value.strip()
+
+        self.query_one(
+            "#username_input_create_item", Input).value.strip()
+
+        self.query_one(
+            "#password_input_create_item", Input).value.strip()
+
+        # Change the template to none template
+        self.parent.parent.template_chosen = 0
+        self.parent.parent.update_display()
+
 
 # This is the screen shown whenever a
 # Item is selected to show its details
@@ -147,18 +179,26 @@ class ShowItemDetails(VerticalScroll):
     def compose(self) -> ComposeResult:
         self.show_password = False
 
-        yield Label("Name: ", id="name_label_items")
-        yield Label("Username: ", id="username_label")
+        yield Container(
+            Label("Name: ", id="name_label_details"),
+            Label("Username: ", id="username_label_details"),
+            # Set this up eventually to use the show password button
+            Horizontal(
+                # Set it up where the label will show the password after the button is clicked
+                Label("Password: ", id="password_label_details"),
+                Button("👁", id="show_password_button_details"),
 
-        # Set this up eventually to use the show password button
-        yield Horizontal(
-            # Set it up where the label will show the password after the button is clicked
-            Label("Password: ", id="password_label"),
-            Button(
-                "👁", id="show_password_button"),
-            id="password_item_view_box",
+                id="password_item_view_box_details",
+            ),
+
+            id="item_details_wrapper"
         )
-        yield Button("Edit", id="edit_button")
+
+        yield Horizontal(
+            Button("Edit", id="edit_button"),
+            Button("🗑", id="delete_button"),
+            id="item_detail_action_buttons",
+        )
 
     def on_mount(self) -> None:
         self.is_mounted = True
@@ -168,10 +208,13 @@ class ShowItemDetails(VerticalScroll):
     def on_button_pressed(self, event: Button.Pressed):
         match event.button.id:
             case "edit_button":
-                print("Todo!")
+                # Not implemented yet
+                print("Not implemented yet")
 
-            case "show_password_button":
+            case "delete_button":
+                self.delete_logic()
 
+            case "show_password_button_details":
                 # If the password is already shown hide it
                 if not self.show_password:
                     self.show_password = True
@@ -187,30 +230,32 @@ class ShowItemDetails(VerticalScroll):
             print("Not mounted")
             return
 
-        print(f"Old val: {old_val}")
-        print(f"New val: {new_val}")
         self.get_item_details()
 
+    def delete_logic(self):
+        print(f"item: {self.item_id}")
+        db.delete_item(self.item_id)
+
+        self.parent.parent.template_chosen = 0
+        self.parent.parent.update_display()
+
     def get_item_details(self):
-        "Updates the values of name. Username and password"
-        print(f"Id inside get_item_details: {self.item_id}")
+        # Updates the values of name. Username and password
         name, username, password = db.get_item_details(self.item_id)
 
-        self.query_one("#name_label_items").update(f"Name: {name}")
-        self.query_one("#username_label", Label).update(
+        self.query_one("#name_label_details").update(f"Name: {name}")
+        self.query_one("#username_label_details", Label).update(
             f"Username: {username}")
 
         if not self.show_password:
             password = len(password) * "."
 
-        self.query_one("#password_label", Label).update(
+        self.query_one("#password_label_details", Label).update(
             f"Password: {password}")
 
 
 # This class is for the screen shown when editing a item
 class EditItemDetails(Vertical):
-    print("Todo!")
-    print("Todo!")
-    print("Todo!")
-    print("Todo!")
-    print("Todo!")
+
+    def compose(self):
+        return

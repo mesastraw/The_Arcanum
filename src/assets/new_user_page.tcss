@@ -45,10 +45,14 @@ NewUserPage {
     padding-left: 1;
 }
 
-# Textual doesnt support font size
-#App_name {
-    dock: top;
-    content-align: center middle;
-    padding-left: 38;
-    text-style: bold;
+#user_creation_message {
+    color: red;
+}
+
+#show_password_button_new_user_page {
+   height: 3;
+   width: 6%;
+   min-width: 4;
+   dock: right;
+   content-align: center middle
 }
