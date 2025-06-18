@@ -11,9 +11,10 @@ This is a terminal password manager built in python using textual its lacking fe
 ## Building
 
 Install dependencies:
-    - Textual
-    - Cryptography
-    - Dotenv
+
+- Textual
+- Cryptography
+- Dotenv
 
 Clone the repo
 
