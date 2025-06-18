@@ -5,11 +5,27 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv  # This will allows us to load env files
 
 # Loads .env file into scope
-load_dotenv("../.env")
+# load_dotenv("../.env")
 
-SECRET_KEY = os.getenv('SECRET_KEY')
-assert SECRET_KEY
-FERNET = Fernet(SECRET_KEY)
+KEY_FILE = "./data/fernet.key"
+
+
+def load_or_create_key():
+    if os.path.exists(KEY_FILE):
+        with open(KEY_FILE, "rb") as f:
+            return f.read()
+    else:
+        key = Fernet.generate_key()
+        os.makedirs(os.path.dirname(KEY_FILE), exist_ok=True)
+        with open(KEY_FILE, "wb") as f:
+            f.write(key)
+        return key
+
+
+# SECRET_KEY = os.getenv('SECRET_KEY')
+# assert SECRET_KEY
+
+FERNET = Fernet(load_or_create_key())
 
 
 # Function for easy encryption
@@ -21,7 +37,7 @@ def encrypt(data):
     return FERNET.encrypt(data.encode()).decode()
 
 
-# Function for east decryption
+# Function for easy decryption
 # Pass in encrypted data and it will decrypt it
 def decrpyt(data):
     """

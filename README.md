@@ -14,7 +14,6 @@ Install dependencies:
 
 - Textual
 - Cryptography
-- Dotenv
 
 Clone the repo
 
